@@ -5,5 +5,5 @@
 基于上面这个背景，我想针对面试中的技术点，在知乎上分别建立问答，大家可以在问答下面讨论，这样也可以快速的理解技术难点。
 
 [JAVA基础](docs/interview/java/base/README.md)  
-[JAVA多线程](docs/interview/java/multithreaded/README.md)
+[JAVA多线程](docs/interview/java/multithreaded/README.md)  
 [场景问题讨论](docs/interview/scene/README.md)  
