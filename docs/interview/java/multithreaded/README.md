@@ -1,7 +1,7 @@
 # 多线程问题汇总讨论  
 **最近在准备后端开发岗位的面试，在准备阶段和面试结束后，遇到了很多问题，想找到问题的答案有的时候会花费大量的时间。但是找同事或者朋友去讨论这个问题，能够很快的得到问题的答案。我希望通过这个项目让java学习者提出自己的问题，并一起讨论**
 ##基础问题
->##并行跟并发有什么区别？  【[知乎讨论链接](https://www.zhihu.com/question/608650446)】
+>##并行跟并发有什么区别？【[知乎讨论链接](https://www.zhihu.com/question/608650446) 】 
 在计算机科学中，"并行"和"并发"是两个相关但具有不同含义的概念。
 并行（Parallelism）是指同时执行多个任务或操作。当系统具有多个处理单元（如多核处理器或分布式计算系统）时，可以同时执行多个任务，每个任务在不同的处理单元上运行。并行可以显著提高系统的处理能力和效率。
 并发（Concurrency）是指在一个时间段内执行多个任务或操作。这些任务可能在同一个处理单元上交替执行，也可能在多个处理单元上并行执行。并发通常用于处理多个独立的任务或操作，并通过合理的任务调度和资源管理来实现更高的效率。
@@ -12,7 +12,7 @@
 并发更强调任务的交替执行和任务调度的能力。
 需要注意的是，并行和并发的概念并不是互斥的，它们可以同时存在。在某些情况下，可以同时利用并行和并发来提高系统的性能和响应能力。
 ![img_4.png](img_4.png)
->##说说什么是进程和线程？
+>##说说什么是进程和线程？【[知乎讨论链接](https://www.zhihu.com/question/603099141) 】
 进程（Process）和线程（Thread）是计算机科学中两个重要的概念，用于描述程序执行的基本单位。
 进程是操作系统中一个正在执行的程序实例。每个进程都有自己的地址空间、内存、文件描述符、资源和状态。一个进程可以由一个或多个线程组成。进程之间相互独立，拥有各自的资源和内存空间，通过进程间通信（IPC）机制来进行数据交换和同步。
 线程是进程中的一个执行单元。一个进程可以包含多个线程，这些线程共享进程的资源和上下文。线程拥有自己的栈空间和程序计数器，但共享进程的内存空间、文件描述符和其他系统资源。多线程可以同时执行不同的任务，提高程序的并发性和效率。
@@ -24,7 +24,7 @@
 执行方式：在多核处理器上，多个线程可以在不同的核心上并行执行，而进程只能在一个核心上执行。
 总结来说，进程是操作系统中资源分配的基本单位，而线程是进程中执行的最小单位。进程用于实现程序的隔离和资源管理，线程用于实现程序的并发执行和任务的划分。
 ![img_5.png](img_5.png)  
-相关谈论问题：协程了解吗？/java是否可以创建子进程？
+相关讨论问题：协程了解吗？/java是否可以创建子进程？
 >##说说线程有几种创建方式？
 创建线程的方式主要有以下几种：
 
@@ -97,32 +97,32 @@ executor.shutdown();
 
 这些是常见的创建线程的方式，每种方式都适用于不同的场景。选择适合的方式取决于具体的需求和编程风格。另外，Java 8及以上版本还引入了函数式编程特性，可以使用Lambda表达式来简化线程的创建和执行，使代码更加简洁。
 ![img_6.png](img_6.png)
->##线程有哪些常用的调度方法?
+>##线程有哪些常用的调度方法?  
 
 >##ThreadLocal使用过吗？使用过程中存在什么问题？
 ThreadLocal感觉是个老大难问题，平常不怎么使用，但是面试却被经常问，之前一直不理解ThreadLocal到底是怎么实现的，其实搞清楚这几个类的关系，就很好理解了。
 （1）Thread
-![img_7.png](img_7.png)
+![img_7.png](img_7.png)  
 首先看Thread,里面是包含两个成员变量的。
 ThreadLocal.ThreadLocalMap threadLocals和ThreadLocal.ThreadLocalMap inheritableThreadLocals
 这两个都是ThreadLocal.ThreadLocalMap，我们先忽略inheritableThreadLocals，主要关注threadLocals
 我们创建一个线程，就会有一个threadLocals，但是它是没有初始化的，具体初始化在什么地方呢？
-![img_8.png](img_8.png)  
+![img_8.png](img_8.png)    
 从调用关系上看，是在ThreadLocal里面初始化的，方法名称为createMap
-![img_9.png](img_9.png)  
+![img_9.png](img_9.png)    
 再往上跟踪，就是set和get两个方法中会调用createMap，如果使用过ThreadLocal的同学，一定就很了解ThreadLocal中的set和get方法了。  
 因此，能够得出结论，thread中threadLocals是在线程内第一次使用ThreadLocal的时候初始化的。
 （2）ThreadLocal
 ThreadLocalMap是ThreadLocal中静态内部类，为什么会把ThreadLocalMap放到ThreadLocal中呢？可以思考一下（https://ask.csdn.net/questions/730831）
-![img_10.png](img_10.png)
+![img_10.png](img_10.png)  
 ThreadLocalMap里面主要是Entry[] table;这里的Entry又是ThreadLocalMap的静态内部类，然后Entry又是继承自弱引用WeakReference<ThreadLocal<?>>，开始看这个结构，确实让人摸不着头脑，但是你把这几个内部类看做是单独的类，可能就好理解一些。
-![img_11.png](img_11.png)  
+![img_11.png](img_11.png)    
 这几个类的具体关系基本就是这样：
-![img_12.png](img_12.png)
+![img_12.png](img_12.png)  
 具体数据储存的结构是这样：
-![img_13.png](img_13.png)
+![img_13.png](img_13.png)  
 ThreadA初始化threadLocal1、threadLocal2、threadLocal3的过程是这样：
-![img_14.png](img_14.png)
+![img_14.png](img_14.png)  
 梳理到这个地方，其实还是有很多疑问的。
 疑问一：Entry[] table中的Entry其实是有一个key和value的，key作为软引用（threadLocal），如果在运行过程中发生gc,key被回收了是否会存在问题？
 答案：没有问题的
